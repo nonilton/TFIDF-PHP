@@ -8,6 +8,7 @@
 
 include_once './Core/TAdverbios.php';
 include_once './Core/TStopWord.php';
+include_once './Core/TCalulaTFIDF.php';
 
 /**
  * Description of Processa
@@ -63,10 +64,17 @@ class Processa {
         return $novosTermos;
     }
 
-    private function getTermosFrequencia($termos) {
+    private function getTermosFrequencia($termos, $MaxDocsCorpus) {
         $termosDocumento = array();
-        foreach (array_count_values($termos) as $key => $value) {
-            $termosDocumento[] = new TTermos($key, $value);
+        $termosFrequencia = array_count_values($termos);
+        $maxter = max($termosFrequencia);
+        
+        $calcula = new TCalculaTFIDF();
+        foreach ($termosFrequencia as $key => $value) {
+           $tf = $calcula->calculaTF($value, $maxter);
+           $idf = $calcula->calculaIDF($MaxDocsCorpus, $maxter);
+           
+           $termosDocumento[] = new TTermos($key, $tf , $tf * $idf );
         }
 
         return $termosDocumento;
@@ -74,17 +82,16 @@ class Processa {
 
     private function loadDocumentos($path) {
         $file = scandir($path);
-        $cont = count($file);
+        $MaxDocsCorpus = count($file);
         $documentos = array();
 
-
-
-        for ($i = 0; $i < $cont; $i++) {
+        for ($i = 0; $i < $MaxDocsCorpus; $i++) {
             if (($file[$i] != ".") and ( $file[$i] != "..")) {
                 $arquivo = file_get_contents($path . "/" . $file[$i]);
                 $TermoSemStopWords = $this->removeStopWords($arquivo);
-                $TermosSemAdverbios = $this->removeAdverbios($TermoSemStopWords);
-                $doc = new TDocumento($file[$i], $path, $this->getTermosFrequencia($TermosSemAdverbios));
+                $TermosSemAdverbios = $this->removeAdverbios($TermoSemStopWords);              
+
+                $doc = new TDocumento($file[$i], $path, $this->getTermosFrequencia($TermosSemAdverbios, $MaxDocsCorpus));
                 $this->documentos[] = $doc;
             }
         }
@@ -97,3 +104,7 @@ class Processa {
     }
 
 }
+
+
+FALTA CALCULA QUANTAS VEZES UM DOCUMENTO APARECE NO CORPUS DE DOCUMENTO.
+        NONILTON

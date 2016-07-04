@@ -15,16 +15,21 @@ class TTermos {
     //put your code here
     private $termo;
     private $frequencia = 0;
+    private $peso = 0;
     
-    function __construct($termo, $freq) {
+    function __construct($termo, $freq, $peso) {
         $this->termo = $termo;
         $this->frequencia = $freq;
-
+        $this->peso = $peso;
     }
 
     
     function getTermo() {
         return $this->termo;
+    }
+    
+    function getPeso(){
+        return $this->peso;
     }
 
     function getFrequencia() {
