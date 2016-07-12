@@ -6,12 +6,15 @@
  * and open the template in the editor.
  */
 
-include './Core/Processa.php';
+include './Core/TProcessa.php';
 include './Core/TDocumento.php';
 include './Core/TTermos.php';
 
-$processa = new Processa("documentos");
+
+$processa = new TProcessa("documentos");
 $documentos = $processa->getDocumentos();
+
+//var_dump($documentos);
 
 for($i=0;$i<sizeof($documentos);$i++){
     echo $documentos[$i]->getNome() ." <br>";
@@ -20,7 +23,7 @@ for($i=0;$i<sizeof($documentos);$i++){
     
     $termos = $documentos[$i]->getTermos();
     for ($j=0;$j<sizeof($termos);$j++){
-        echo $termos[$j]->getTermo() ." - " . $termos[$j]->getFrequencia()."<br>";
+        echo "Termo:". $termos[$j]->getTermo() ." Frequencia: " . $termos[$j]->getFrequencia()." Peso:".$termos[$j]->getPeso()."<br>";
     }
 }
 

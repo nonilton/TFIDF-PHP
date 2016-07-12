@@ -25,4 +25,16 @@ class TAdverbios {
     public function getAdberbios(){
         return $this->adverbios;
     }
+    
+    public function removeAdverbios($content){
+        $novosTermos = array();
+        foreach ($content as $line) {
+            if (!in_array($line, $this->adverbios)) {
+                $novosTermos[] = $line;
+            }
+        }
+
+        return $novosTermos;
+        
+    }
 }

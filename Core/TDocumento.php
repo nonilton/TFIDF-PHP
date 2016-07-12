@@ -38,6 +38,10 @@ class TDocumento {
         return $this->termos;
     }
     
+    public function getTermo($posicao){
+        return $this->termos[$posicao];
+    }
+    
     public function setTermos($termos){
         $this->termos = $termos;        
     }
