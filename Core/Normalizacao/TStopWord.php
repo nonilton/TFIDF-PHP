@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-include_once './Core/TAssentos.php';
+
 /**
  * Description of TStopWord
  *
@@ -15,11 +15,9 @@ include_once './Core/TAssentos.php';
 class TStopWord {
     //put your code here
     private $stopwords;
-    private $acentos;
     
     public function TStopWord(){
         $this->stopwords = file("resources/stopwords");
-        $this->acentos = new TAssentos();
         
         for($i=0;$i<sizeof($this->stopwords);$i++){
             $this->stopwords[$i] = trim(strtolower($this->stopwords[$i]));
@@ -31,17 +29,13 @@ class TStopWord {
     }
     
     public function removeStopWords($content){
-        $termos = explode(" ", $this->acentos->removeAcentos($content));
-
+        $termos = explode(" ", $content);
+        $novosTermos = array();
         for ($i = 0; $i < sizeof($termos); $i++) {
             $termos[$i] = strtolower(trim($termos[$i]));
-        }
-
-        $novosTermos = array();
-
-        foreach ($termos as $line) {
-            if (!in_array($line, $this->stopwords)) {
-                $novosTermos[] = $line;
+            
+            if (!in_array($termos[$i], $this->stopwords)){
+                $novosTermos[] = $termos[$i];
             }
         }
 

@@ -6,11 +6,12 @@
  * and open the template in the editor.
  */
 
-include_once './Core/TAssentos.php';
-include_once './Core/TAdverbios.php';
-include_once './Core/TStopWord.php';
-include_once './Core/TCalulaTFIDF.php';
-include_once './Core/TFrequencia.php';
+include_once './Core/Normalizacao/TAssentos.php';
+include_once './Core/Normalizacao/TAdverbios.php';
+include_once './Core/Normalizacao/TStopWord.php';
+include_once './Core/Pesos/TCalulaTFIDF.php';
+include_once './Core/Normalizacao/TNormalize.php';
+include_once './Core/Pesos/TFrequencia.php';
 
 /**
  * Description of TProcessa
@@ -21,16 +22,11 @@ class TProcessa {
 
     //put your code here
     private $documentos = array();
-    private $adverbios;
-    private $stopWords;
     private $totalDocumentosColecao;
 
     public function TProcessa($path) {
-        $this->adverbios = new TAdverbios();
-        $this->stopWords = new TStopWord();
         $this->loadDocumentos($path);
     }
-
     
     private function getTermosFrequencia($termos, $MaxDocsCorpus) {
         $frequencia = new TFrequencia();
@@ -45,8 +41,9 @@ class TProcessa {
         for ($i = 0; $i < $this->totalDocumentosColecao; $i++) {
             if (($file[$i] != ".") and ( $file[$i] != "..")) {
                 $arquivo = file_get_contents($path . "/" . $file[$i]);
-                $TermoSemStopWords = $this->stopWords->removeStopWords($arquivo);
-                $TermosSemAdverbios = $this->adverbios->removeAdverbios($TermoSemStopWords);
+
+                $normalize = new TNormalize();
+                $TermosSemAdverbios = $normalize->processa($arquivo);
 
                 $frequencia = new TFrequencia();
                 $doc = new TDocumento($file[$i], $path, $frequencia->getTermosFrequencia($this->documentos, $TermosSemAdverbios, $this->totalDocumentosColecao));

@@ -41,7 +41,7 @@ class TFrequencia {
                 
                 if ($termo == $termos[$j]->getTermo()) {
                     $QtDocs += $termos[$j]->getFrequencia();
-                    echo "$termo $QtDocs";    
+//                    echo "$termo $QtDocs";    
                     break;
                 }
             } 
