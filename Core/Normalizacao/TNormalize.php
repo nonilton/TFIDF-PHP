@@ -21,11 +21,11 @@ class TNormalize {
       $this->adverbios = new TAdverbios();
       $this->stopWords = new TStopWord();
       $this->acentos = new TAssentos();
-    }    
-    
+    }        
     
     public function processa($content){
         $conteudo = $this->acentos->removeAcentos($content);
+        
         $TermoSemStopWords = $this->stopWords->removeStopWords($conteudo);
         return $this->adverbios->removeAdverbios($TermoSemStopWords);
         
